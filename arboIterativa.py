@@ -27,7 +27,6 @@ class Arbol:
             self.encontroSolucion == True
             #os.system("pause")
             sys.exit()
-            return True
 
     def funcionSucesor(self,nodoPadre):
 
