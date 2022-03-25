@@ -1,7 +1,6 @@
 import copy
 import sys
 import os
-from time import time
 
 from nodo import Nodo
 

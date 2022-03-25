@@ -1,7 +1,6 @@
 import copy
 import sys
 import os
-from time import time
 
 from nodo import Nodo
 
@@ -26,128 +25,140 @@ class ArbolP:
             self.encontroSolucion == True
             #os.system("pause")
             sys.exit()
+            return True
 
     def funcionSucesor(self,nodoPadre):
 
         #Comprueba si el nodo es solucion
         if self.isSolution(nodoPadre) == True:
             return
-        #Moverlo derecha
-        if nodoPadre.x+1 < 3:
+        #Comprueba el nivel de profundidad para determinar si encuentra solucion o no
+        elif nodoPadre.profundidad < 10:
 
-            nuevoNodo = Nodo()
-            #Toma la matriz del padre
-            dataAux = copy.deepcopy(nodoPadre.data)
+            #Moverlo derecha
+            if nodoPadre.x+1 < 3:
 
-            #Hace el intercambio del numero y el espacio vacio
-            aux = dataAux[nodoPadre.y][nodoPadre.x+1]
-            dataAux[nodoPadre.y][nodoPadre.x+1] = " "
-            dataAux[nodoPadre.y][nodoPadre.x] = aux
-                
-            #Se coloca al nuevo nodo su nodo padre
-            nuevoNodo.nodoPadre = nodoPadre.data
-            nuevoNodo.data = copy.deepcopy(dataAux)
+                nuevoNodo = Nodo()
+                #Toma la matriz del padre
+                dataAux = copy.deepcopy(nodoPadre.data)
 
-            #Si no es igual a su padre, se agrega como hijo y este mismo desarrolla sus hijos
-            if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
+                #Hace el intercambio del numero y el espacio vacio
+                aux = dataAux[nodoPadre.y][nodoPadre.x+1]
+                dataAux[nodoPadre.y][nodoPadre.x+1] = " "
+                dataAux[nodoPadre.y][nodoPadre.x] = aux
 
-                #Coloca las coordenadas del espacio vacio
-                nuevoNodo.x = nodoPadre.x+1
-                nuevoNodo.y = nodoPadre.y
-                #Agrega el nivel de profundidad
-                nuevoNodo.profundidad = nodoPadre.profundidad+1
-                self.costoFinal+=1
-                nuevoNodo.printData()
-                print("\n")
-                nodoPadre.hijos.append(nuevoNodo)
-                #Desarrolla el nuevo nodo sus propios hijos por la misma rama
-                self.funcionSucesor(nuevoNodo)
+                #Se coloca al nuevo nodo su nodo padre
+                nuevoNodo.nodoPadre = nodoPadre.data
+                nuevoNodo.data = copy.deepcopy(dataAux)
 
-        #Moverse a la izquierda
-        if nodoPadre.x-1>=0:
+                #Si no es igual a su padre, se agrega como hijo y este mismo desarrolla sus hijos
+                if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
 
-            nuevoNodo = Nodo()
-            #Toma la matriz del padre
-            dataAux = copy.deepcopy(nodoPadre.data)
-            #Hace el intercambio del numero y el espacio vacio
-            aux = dataAux[nodoPadre.y][nodoPadre.x-1]
-            dataAux[nodoPadre.y][nodoPadre.x-1] = " "
-            dataAux[nodoPadre.y][nodoPadre.x] = aux
-            
-            #Se coloca al nuevo nodo su nodo padre
-            nuevoNodo.nodoPadre = nodoPadre.data
-            nuevoNodo.data = copy.deepcopy(dataAux)
-            #Si no es igual a su padre, se agrega como hijo
-            if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
-                #Coloca las coordenadas del espacio vacio
-                nuevoNodo.x = nodoPadre.x-1
-                nuevoNodo.y = nodoPadre.y
-                nuevoNodo.profundidad = nodoPadre.profundidad+1
-                self.costoFinal+=1
-                nuevoNodo.printData()
-                print("\n")
-                nodoPadre.hijos.append(nuevoNodo)
-                #Desarrolla el nuevo nodo sus propios hijos por la misma rama
-            self.funcionSucesor(nuevoNodo)
-        #Moverse arriba
-        if nodoPadre.y-1>=0:
+                    #Coloca las coordenadas del espacio vacio
+                    nuevoNodo.x = nodoPadre.x+1
+                    nuevoNodo.y = nodoPadre.y
+                    #Agrega el nivel de profundidad
+                    nuevoNodo.profundidad = nodoPadre.profundidad+1
+                    self.costoFinal+=1
+                    nuevoNodo.printData()
+                    print("\n")
+                    nodoPadre.hijos.append(nuevoNodo)
+                    #Desarrolla el nuevo nodo sus propios hijos por la misma rama
+                    self.funcionSucesor(nuevoNodo)
 
-            nuevoNodo = Nodo()
-            #Toma la matriz del padre
-            dataAux = copy.deepcopy(nodoPadre.data)
-            #Hace el intercambio del numero y el espacio vacio
-            aux = dataAux[nodoPadre.y-1][nodoPadre.x]
-            dataAux[nodoPadre.y-1][nodoPadre.x] = " "
-            dataAux[nodoPadre.y][nodoPadre.x] = aux
-            
-            #Se coloca al nuevo nodo su nodo padre
-            nuevoNodo.nodoPadre = nodoPadre.data
-            nuevoNodo.data = copy.deepcopy(dataAux)
-            #Si no es igual a su padre, se agrega como hijo
-            if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
-                #Coloca las coordenadas del espacio vacio
-                nuevoNodo.x = nodoPadre.x
-                nuevoNodo.y = nodoPadre.y-1
-                nuevoNodo.profundidad = nodoPadre.profundidad+1
-                self.costoFinal+=1
-                nuevoNodo.printData()
-                print("\n")
-                nodoPadre.hijos.append(nuevoNodo)
-                #Desarrolla el nuevo nodo sus propios hijos por la misma rama
-                self.funcionSucesor(nuevoNodo)
+            #Moverse a la izquierda
+            if nodoPadre.x-1>=0:
 
-        #Moverse abajo
-        if nodoPadre.y+1<3:
-            nuevoNodo = Nodo()
-            #Toma la matriz del padre
-            dataAux = copy.deepcopy(nodoPadre.data)
-            #Hace el intercambio del numero y el espacio vacio
-            aux = dataAux[nodoPadre.y+1][nodoPadre.x]
-            dataAux[nodoPadre.y+1][nodoPadre.x] = " "
-            dataAux[nodoPadre.y][nodoPadre.x] = aux
-            
-            #Se coloca al nuevo nodo su nodo padre
-            nuevoNodo.nodoPadre = nodoPadre.data
-            nuevoNodo.data = copy.deepcopy(dataAux)
-            #Si no es igual a su padre, se agrega como hijo
-            if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
-                #Coloca las coordenadas del espacio vacio
-                nuevoNodo.x = nodoPadre.x
-                nuevoNodo.y = nodoPadre.y+1
-                nuevoNodo.profundidad = nodoPadre.profundidad+1
-                self.costoFinal+=1
-                nuevoNodo.printData()
-                print("\n")
-                nodoPadre.hijos.append(nuevoNodo)
-                #Desarrolla el nuevo nodo sus propios hijos por la misma rama
-                self.funcionSucesor(nuevoNodo)
-    
-             
-            
+                nuevoNodo = Nodo()
+                #Toma la matriz del padre
+                dataAux = copy.deepcopy(nodoPadre.data)
 
-    
+                #Hace el intercambio del numero y el espacio vacio
+                aux = dataAux[nodoPadre.y][nodoPadre.x-1]
+                dataAux[nodoPadre.y][nodoPadre.x-1] = " "
+                dataAux[nodoPadre.y][nodoPadre.x] = aux
+
+                #Se coloca al nuevo nodo su nodo padre
+                nuevoNodo.nodoPadre = nodoPadre.data
+                nuevoNodo.data = copy.deepcopy(dataAux)
+
+                #Si no es igual a su padre, se agrega como hijo
+                if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
+
+                    #Coloca las coordenadas del espacio vacio
+                    nuevoNodo.x = nodoPadre.x-1
+                    nuevoNodo.y = nodoPadre.y
+                    nuevoNodo.profundidad = nodoPadre.profundidad+1
+                    self.costoFinal+=1
+                    nuevoNodo.printData()
+                    print("\n")
+                    nodoPadre.hijos.append(nuevoNodo)
+                    #Desarrolla el nuevo nodo sus propios hijos por la misma rama
+                    self.funcionSucesor(nuevoNodo)
+
+            #Moverse arriba
+            if nodoPadre.y-1>=0:
+
+                nuevoNodo = Nodo()
+                #Toma la matriz del padre
+                dataAux = copy.deepcopy(nodoPadre.data)
+
+                #Hace el intercambio del numero y el espacio vacio
+                aux = dataAux[nodoPadre.y-1][nodoPadre.x]
+                dataAux[nodoPadre.y-1][nodoPadre.x] = " "
+                dataAux[nodoPadre.y][nodoPadre.x] = aux
+
+                #Se coloca al nuevo nodo su nodo padre
+                nuevoNodo.nodoPadre = nodoPadre.data
+                nuevoNodo.data = copy.deepcopy(dataAux)
+
+                #Si no es igual a su padre, se agrega como hijo
+                if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
+
+                    #Coloca las coordenadas del espacio vacio
+                    nuevoNodo.x = nodoPadre.x
+                    nuevoNodo.y = nodoPadre.y-1
+                    nuevoNodo.profundidad = nodoPadre.profundidad+1
+                    self.costoFinal+=1
+                    nuevoNodo.printData()
+                    print("\n")
+                    nodoPadre.hijos.append(nuevoNodo)
+                    #Desarrolla el nuevo nodo sus propios hijos por la misma rama
+                    self.funcionSucesor(nuevoNodo)
+
+            #Moverse abajo
+            if nodoPadre.y+1<3:
+
+                nuevoNodo = Nodo()
+                #Toma la matriz del padre
+                dataAux = copy.deepcopy(nodoPadre.data)
+
+                #Hace el intercambio del numero y el espacio vacio
+                aux = dataAux[nodoPadre.y+1][nodoPadre.x]
+                dataAux[nodoPadre.y+1][nodoPadre.x] = " "
+                dataAux[nodoPadre.y][nodoPadre.x] = aux
+
+                #Se coloca al nuevo nodo su nodo padre
+                nuevoNodo.nodoPadre = nodoPadre.data
+                nuevoNodo.data = copy.deepcopy(dataAux)
+
+                #Si no es igual a su padre, se agrega como hijo
+                if nuevoNodo.sonIguales(nodoPadre.nodoPadre) == False:
+
+                    #Coloca las coordenadas del espacio vacio
+                    nuevoNodo.x = nodoPadre.x
+                    nuevoNodo.y = nodoPadre.y+1
+                    nuevoNodo.profundidad = nodoPadre.profundidad+1
+                    self.costoFinal+=1
+                    nuevoNodo.printData()
+                    print("\n")
+                    nodoPadre.hijos.append(nuevoNodo)
+                    #Desarrolla el nuevo nodo sus propios hijos por la misma rama
+                    self.funcionSucesor(nuevoNodo)
+
+
     def iniciaBusqueda(self):
-    
+
         nodoRaiz = Nodo()
         nodoRaiz.setData(copy.deepcopy(self.estadoInicial))
         nodoRaiz.setPadre(copy.deepcopy(self.estadoInicial))
@@ -160,7 +171,7 @@ class ArbolP:
 
             print("Se llego a la solucion")
             return True
-        
+
         self.raiz = nodoRaiz
         self.raiz.printData()
         print("\n")
