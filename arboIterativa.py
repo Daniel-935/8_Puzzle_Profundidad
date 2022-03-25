@@ -14,6 +14,7 @@ class Arbol:
         self.estadoInicial = nInicial
         self.costoFinal = 0
         self.encontroSolucion = False
+        self.profundidadMax = 0
 
     def isSolution(self, nodo):
 
@@ -34,7 +35,7 @@ class Arbol:
         if self.isSolution(nodoPadre) == True:
             return
         #Comprueba el nivel de profundidad para determinar si encuentra solucion o no
-        elif nodoPadre.profundidad < 10:
+        elif nodoPadre.profundidad < self.profundidadMax:
              
             #Moverlo derecha
             if nodoPadre.x+1 < 3:
@@ -165,26 +166,20 @@ class Arbol:
         nodoRaiz.setPadre(copy.deepcopy(self.estadoInicial))
         nodoRaiz.x = 1
         nodoRaiz.y = 1
-
-        #Comprueba si la raiz es objetivo
-
-        if self.isSolution(nodoRaiz) == True:
-
-            print("Se llego a la solucion")
-            return True
         
         self.raiz = nodoRaiz
         self.raiz.printData()
         print("\n")
 
         #Comienza a realizar la busqueda en profundidad
-        #El Metodo es recursivo y tiene limite ya que es iterativo
+        #El Metodo es recursivo y tiene limite que se incrementa cada vez ya que es iterativo
         self.funcionSucesor(self.raiz)
         #Comprueba si al final se encontro solucion o no
         if self.encontroSolucion == False:
 
-            print("***************************")
-            print("El problema no tiene solucion")
+            self.profundidadMax+=1
+            self.costoFinal = 0
+            self.iniciaBusqueda()
         
     
     
